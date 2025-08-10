@@ -1,0 +1,236 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karthik Reddy C G - Professional Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Karthik Reddy C G</h1>
+            <div class="space-x-4">
+                <a href="#home" class="hover:text-blue-300">Home</a>
+                <a href="#about" class="hover:text-blue-300">About</a>
+                <a href="#experience" class="hover:text-blue-300">Experience</a>
+                <a href="#skills" class="hover:text-blue-300">Skills</a>
+                <a href="#certifications" class="hover:text-blue-300">Certifications</a>
+                <a href="#projects" class="hover:text-blue-300">Projects</a>
+                <a href="#contact" class="hover:text-blue-300">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="bg-blue-800 text-white py-20">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Karthik Reddy C G</h2>
+            <p class="text-xl mb-6">Senior Software Engineer | Pega Expert | Cloud Solutions Architect</p>
+            <a href="#contact" class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700">Get in Touch</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-center">About Me</h2>
+            <div class="max-w-3xl mx-auto">
+                <p class="text-lg mb-4">With over 10 years of IT experience, I specialize in designing and developing enterprise applications using Pega PRPC, with expertise in banking, healthcare, and insurance domains. My skills span cloud infrastructure (AWS), database management, and integration technologies. I excel in delivering scalable, high-quality solutions while adhering to Agile and Waterfall methodologies.</p>
+                <p class="text-lg">I hold an MBA from BITS Pilani (9.0 GPA) and a B.E. in Information Science (72.44%). My strong analytical, problem-solving, and communication skills enable me to collaborate effectively with cross-functional teams to deliver innovative solutions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="bg-white py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-center">Work Experience</h2>
+            <div class="space-y-8 max-w-4xl mx-auto">
+                <div>
+                    <h3 class="text-xl font-semibold">Software Engineer 3, JPMorgan Chase, USA</h3>
+                    <p class="text-gray-600">Aug 2022 – Present</p>
+                    <ul class="list-disc ml-6 mt-2">
+                        <li>Designed and developed Pega-based solutions for eDiscovery Legal Workflow using Pega 8.4, Kubernetes, and AWS.</li>
+                        <li>Integrated applications with Java microservices and APIs.</li>
+                        <li>Collaborated with stakeholders to create scalable cloud infrastructure.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold">Software Developer, Creative Team LLC, USA</h3>
+                    <p class="text-gray-600">Jan 2022 – Aug 2022</p>
+                    <ul class="list-disc ml-6 mt-2">
+                        <li>Developed Enterprise Migration Tool using Pega 8.4 and Kubernetes.</li>
+                        <li>Participated in design discussions and requirement grooming.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold">Senior Consultant, Ernst and Young, Bengaluru/Charlotte</h3>
+                    <p class="text-gray-600">March 2017 – Aug 2021</p>
+                    <ul class="list-disc ml-6 mt-2">
+                        <li>Led projects like Automated Due Diligence, Apheleia, and Digital Claims using Pega frameworks.</li>
+                        <li>Mentored teams and conducted design/code reviews.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold">Senior Software Developer, UST Global, Bangalore</h3>
+                    <p class="text-gray-600">Aug 2015 – March 2017</p>
+                    <ul class="list-disc ml-6 mt-2">
+                        <li>Developed Sell Point application with Pega and Java integrations.</li>
+                        <li>Customized dashboards for enhanced usability.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold">Senior Software Engineer, Mindtree Ltd, Bangalore</h3>
+                    <p class="text-gray-600">May 2013 – Aug 2015</p>
+                    <ul class="list-disc ml-6 mt-2">
+                        <li>Implemented Global Exposure Solution using Pega PRPC and SOAP/JMS integrations.</li>
+                        <li>Designed flexible applications using Dynamic Class Referencing.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-center">Technical Skills</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div>
+                    <h3 class="text-lg font-semibold">BPM & RPA Tools</h3>
+                    <p class="text-gray-600">Pega PRPC, UI Path, Pega Robotics</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold">Pega Frameworks</h3>
+                    <p class="text-gray-600">Claims for Insurance, CLM, KYC, CDH, PDFS, Smart Dispute, PDC, AES</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold">Cloud Services</h3>
+                    <p class="text-gray-600">AWS (EC2, ECS, EKS, S3, EBS, VPC)</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold">Programming Languages</h3>
+                    <p class="text-gray-600">Java, J2EE</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold">Scripting Languages</h3>
+                    <p class="text-gray-600">JSP, JavaScript, HTML, XML, YML</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold">Databases & Servers</h3>
+                    <p class="text-gray-600">IBM DB2, Oracle SQL, MySQL, IBM WebSphere, Tomcat</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="bg-white py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-center">Certifications</h2>
+            <ul class="list-disc ml-6 max-w-3xl mx-auto">
+                <li>Certified Pega Marketing Consultant (CPMC) v7.2 – June 2017</li>
+                <li>Certified Pega Decisioning Consultant (CPDC) v7.2 – May 2017</li>
+                <li>Pega Certified Senior System Architect (CSSA) v7.1 – Feb 2016</li>
+                <li>Pega Certified System Architect (CSA) v6.2 – Feb 2014</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-center">Key Projects</h2>
+            <div class="space-y-8 max-w-4xl mx-auto">
+                <div>
+                    <h3 class="text-xl font-semibold">Smart Triaging</h3>
+                    <p class="text-gray-600">Utilized machine learning and Pega strategies to troubleshoot issues, balancing solution quality and resolution speed.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold">Fair Lending Risk Assessment Tool (FLRA)</h3>
+                    <p class="text-gray-600">Standardized risk assessment across business lines with customizable questionnaires and quantitative/qualitative analysis.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold">Smart Email</h3>
+                    <p class="text-gray-600">Developed an email analysis solution to categorize customer emails and route cases to relevant queues using configurable logic.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold">eDiscovery Legal Workflow</h3>
+                    <p class="text-gray-600">Designed and developed a Pega-based legal workflow solution with AWS and Kubernetes integration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-blue-900 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-8">Contact Me</h2>
+            <p class="text-lg mb-4">Email: karthikreddycg@gmail.com</p>
+            <p class="text-lg mb-4">Phone: +1 513 879 3629</p>
+            <p class="text-lg">Let's connect to discuss how I can contribute to your next project!</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 Karthik Reddy C G. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
